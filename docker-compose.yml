@@ -1,0 +1,22 @@
+scpserver:
+  image: eeacms/scp-server
+  ports:
+  - "2222:22"
+  environment:
+    AUTHORIZED_KEYS: |
+      ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEA4FhFro3H....vg0hrC3s0= My First CERT
+    DATADIR: /usr/local/apache2/htdocs
+  volumes_from:
+  - htdocs
+
+httpd:
+  image: httpd
+  ports:
+  - "80:80"
+  volumes_from:
+  - htdocs
+
+htdocs:
+  image: tianon/true
+  volumes:
+  - /var/tmp/wwwdata:/usr/local/apache2/htdocs
