@@ -2,9 +2,14 @@
 
 Restricted SSH server which allows SCP / SFTP access only. This image is meant to be used together with the httpd:2.4 image
 
+The purpose of this image is to make a constellation of a website with a way to update the content using SCP or SFTP.
+
 Running
 -------
 
+It is easiest if you use docker-compose. Then you can specify the authorized SSH keys in a block declaration:
+
+docker-compose.yml file:
 ```
 scpserver:
   image: eeacms/scp-server
@@ -31,6 +36,7 @@ htdocs:
   - <DATADIR>:/usr/local/apache2/htdocs
 ```
 
-Then you can copy into the container (e.g. via scp) as the `www` user:
+When started you can upload data into the container (e.g. via scp) as the `www` user:
 
     scp -P <PORT> <FILE> www@<DOCKER-HOST>:
+
