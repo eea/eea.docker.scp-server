@@ -1,8 +1,11 @@
-# SCP server
+SCP server
+==========
 
 Restricted SSH server which allows SCP / SFTP access only. This image is meant to be used together with the httpd:2.4 image
 
 The purpose of this image is to make a constellation of a website with a way to update the content using SCP or SFTP.
+
+Original code and idea is from https://github.com/gituser173/docker-scp-server.
 
 Running
 -------
