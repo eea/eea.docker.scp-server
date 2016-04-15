@@ -10,9 +10,11 @@ echo "$AUTHORIZED_KEYS" >$AUTHORIZED_KEYS_FILE
 #sed -i -e '/chrootpath/d' /etc/rssh.conf
 #echo "chrootpath = $DATADIR" >> /etc/rssh.conf
 
-usermod --home "$DATADIR" --shell /usr/bin/rssh "$OWNER"
+groupmod --non-unique --gid "$GROUPID" data
+usermod --non-unique --home "$DATADIR" --shell /usr/bin/rssh --uid "$USERID" --gid "$GROUPID" "$OWNER"
 # Chown data folder (if mounted as a volume for the first time)
-chown "$OWNER" "$DATADIR"
+chown "${OWNER}:data" "$DATADIR"
+chown "${OWNER}:data" $AUTHORIZED_KEYS_FILE
 
 # Run sshd on container start
 exec /usr/sbin/sshd -D -e

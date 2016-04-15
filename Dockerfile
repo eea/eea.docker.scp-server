@@ -2,14 +2,12 @@
 # This image is designed to collaborate with the Docker Hub image httpd:2.4
 FROM debian:jessie
 
-ENV HTTPD_PREFIX /usr/local/apache2
-ENV DATADIR $HTTPD_PREFIX/htdocs
-ENV AUTHORIZED_KEYS_FILE /authorized_keys
-ENV OWNER www
+ENV DATADIR=/usr/local/apache2/htdocs AUTHORIZED_KEYS_FILE=/authorized_keys USERID=33 GROUPID=33 OWNER=data
 RUN apt-get update \
- && apt-get install -y openssh-server rssh \
+ && apt-get install -y openssh-server rssh rsync \
  && rm -f /etc/ssh/ssh_host_* \
- && useradd --non-unique --uid 33 --gid 33 --no-create-home --home-dir /usr/local/apache2/htdocs --shell /usr/bin/rssh $OWNER \
+ && groupadd --non-unique --gid $GROUPID data \
+ && useradd --non-unique --uid $USERID --gid $GROUPID --no-create-home --home-dir $DATADIR --shell /usr/bin/rssh $OWNER \
  && mkdir -p "$DATADIR" \
  && chown $OWNER "$DATADIR" \
  && echo "AuthorizedKeysFile $AUTHORIZED_KEYS_FILE" >>/etc/ssh/sshd_config \
@@ -19,7 +17,8 @@ RUN apt-get update \
  && chmod 0600 $AUTHORIZED_KEYS_FILE \
  && mkdir /var/run/sshd && chmod 0755 /var/run/sshd \
  && echo "allowscp" >> /etc/rssh.conf \
- && echo "allowsftp" >> /etc/rssh.conf
+ && echo "allowsftp" >> /etc/rssh.conf \
+ && echo "allowrsync" >> /etc/rssh.conf
 
 ADD entrypoint.sh /
 

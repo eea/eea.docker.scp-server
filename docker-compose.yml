@@ -6,6 +6,8 @@ scpserver:
     AUTHORIZED_KEYS: |
       ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEA4FhFro3H....vg0hrC3s0= My First CERT
     DATADIR: /usr/local/apache2/htdocs
+    USERID: 500
+    GROUPID: 500
   volumes_from:
   - htdocs
 
